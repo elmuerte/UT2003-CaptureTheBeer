@@ -1,0 +1,5 @@
+Beer crates instead of flag
+Crate carry consomes a bottle of beer every x minutes
+When the crate fo beer is empty return it to the base
+Beer consumption defines drunkness
+... do something to sober up ...
