@@ -3,7 +3,7 @@
 // Beer action messages
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBMessage.uc,v 1.1 2003/10/16 15:14:45 elmuerte Exp $
+// $Id: CTBMessage.uc,v 1.2 2003/10/17 11:22:35 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBMessage extends CTFMessage;
@@ -24,10 +24,12 @@ static simulated function ClientReceive(
 	switch (Switch)
 	{
 		case 7: // out of beer
+						break;
 		case 8: // too much beer, dropped it
 						Super.ClientReceive(P, 2, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 						break;
 		case 9: // too much beer
+						break;
 	}
 }
 
@@ -37,9 +39,7 @@ static function string GetString(
 	optional PlayerReplicationInfo RelatedPRI_2,
 	optional Object OptionalObject
 	)
-{
-	if ( TeamInfo(OptionalObject) == None )
-		return "";
+{	
 	switch (Switch)
 	{		
 		case 0: // Captured the flag.		
@@ -52,14 +52,14 @@ static function string GetString(
 			return super.GetString(Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 
 		case 7: // out of beer
-			if (RelatedPRI_1 == None)
-				return "";
+			if ( TeamInfo(OptionalObject) == None )	return "";
+			if (RelatedPRI_1 == None) return "";
 			if ( TeamInfo(OptionalObject).TeamIndex == 0 ) 
 				return RelatedPRI_1.playername@Default.NoBeerRed;
 			else
 				return RelatedPRI_1.playername@Default.NoBeerBlue;
 			break;
-		case 8: // dropped flag because to much beer
+		case 8: // dropped flag because too much beer
 				return super.GetString(2, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 		case 9: // to much beer
 				return Default.TooMuchToDrink;

@@ -3,7 +3,7 @@
 // The ingame beer crate you can carry around
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: BeerCrate.uc,v 1.1 2003/10/16 15:14:45 elmuerte Exp $
+// $Id: BeerCrate.uc,v 1.2 2003/10/17 11:22:35 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class BeerCrate extends CTFflag abstract;
@@ -60,5 +60,5 @@ function TooMuchToDrink()
 
 defaultproperties
 {
-	MessageClass=class'CTBMessage'
+	MessageClass=class'CaptureTheBeer.CTBMessage'
 }
