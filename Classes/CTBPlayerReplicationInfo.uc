@@ -3,7 +3,7 @@
 // Replication info for the player
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBPlayerReplicationInfo.uc,v 1.4 2003/10/21 10:59:56 elmuerte Exp $
+// $Id: CTBPlayerReplicationInfo.uc,v 1.5 2003/10/22 11:14:26 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBPlayerReplicationInfo extends xPlayerReplicationInfo;
@@ -13,18 +13,20 @@ class CTBPlayerReplicationInfo extends xPlayerReplicationInfo;
 /** number of beer bottles consumed */
 var float BeerConsumption;
 /** maximum a person can drink */
-var(CTB) config float MaxBeerConsumption;
+var() float MaxBeerConsumption;
+var float DEFMaxBeerConsumption;
 
 var sound ConsumeBeer;
 
-var(CTB) config float fDrinkSpeed, fSoberSpeed;
+var() float fDrinkSpeed, fSoberSpeed;
+var float DEFfDrinkSpeed, DEFfSoberSpeed; // defauls
 var float curDrunkSpeed, curSoberSpeed;
 
 // beer effect settings
 /** the amplitude */
-var(CTB) config float smWanderSpeed;
+var() float smWanderSpeed, DEFsmWanderSpeed;
 /** the acceleration */
-var(CTB) config float smAccel;
+var() float smAccel, DEFsmAccel;
 /** direction */
 var float smWanderDirX, smWanderDirY;
 
@@ -32,6 +34,19 @@ replication
 {
 	reliable if ( Role == ROLE_Authority )
 		BeerConsumption;
+
+	reliable if ( Role == ROLE_Authority )
+		MaxBeerConsumption, fDrinkSpeed, fSoberSpeed, smWanderSpeed, smAccel;
+}
+
+event BeginPlay()
+{
+	Super.BeginPlay();
+	MaxBeerConsumption = default.DEFMaxBeerConsumption;
+	fDrinkSpeed = default.DEFfDrinkSpeed;
+	fSoberSpeed = default.DEFfSoberSpeed;
+	smWanderSpeed = default.DEFsmWanderSpeed;
+	smAccel = default.DEFsmAccel;
 }
 
 event tick(float deltatime)
@@ -69,15 +84,8 @@ event tick(float deltatime)
 }
 
 defaultproperties
-{
-	MaxBeerConsumption=24
-	fDrinkSpeed=15
-	fSoberSpeed=30
-
-	smWanderSpeed=500
-	smAccel=2.5
+{	
 	smWanderDirX=1
 	smWanderDirY=1
-
 	ConsumeBeer=sound'CaptureTheBeer.ConsumeSound'
 }

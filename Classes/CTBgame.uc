@@ -3,14 +3,94 @@
 // Game class
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBgame.uc,v 1.3 2003/10/20 13:39:24 elmuerte Exp $
+// $Id: CTBgame.uc,v 1.4 2003/10/22 11:14:26 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
-class CTBgame extends xCTFgame;
+class CTBgame extends xCTFgame config;
+
+// Configuration
+var(CTB) config int		BottlesPerCrate;				// GameReplicationInfo
+var(CTB) config bool	bHealthPickupRestore;		// xPlayer
+// PlayerReplicationInfo --
+var(CTB) config float MaxBeerConsumption;
+var(CTB) config float fDrinkSpeed;
+var(CTB) config float fSoberSpeed;
+var(CTB) config float smWanderSpeed;
+var(CTB) config float smAccel;
+// -- PlayerReplicationInfo
+
+var localized string CTBPropsDisplayText[7];
+
+event InitGame( string Options, out string Error )
+{
+	local string InOpt;
+
+	Super.InitGame(Options, Error);
+
+	InOpt = ParseOption( Options, "CrateSize");
+	if ( int(InOpt) > 0 )
+	{
+		BottlesPerCrate = int(InOpt);
+	}
+	InOpt = ParseOption( Options, "HealthRestore");
+	if ( InOpt != "" )
+	{
+		bHealthPickupRestore = bool(InOpt);
+	}
+	InOpt = ParseOption( Options, "MaxBeer");
+	if ( int(InOpt) > 0 )
+	{
+		MaxBeerConsumption = int(InOpt);
+	}
+	InOpt = ParseOption( Options, "DrinkSpeed");
+	if ( float(InOpt) > 0 )
+	{
+		fDrinkSpeed = float(InOpt);
+	}
+	InOpt = ParseOption( Options, "SoberSpeed");
+	if ( float(InOpt) > 0 )
+	{
+		fSoberSpeed = float(InOpt);
+	}
+	InOpt = ParseOption( Options, "WanderSpeed");
+	if ( float(InOpt) > 0 )
+	{
+		smWanderSpeed = float(InOpt);
+	}
+	InOpt = ParseOption( Options, "WanderAccel");
+	if ( float(InOpt) > 0 )
+	{
+		smAccel = float(InOpt);
+	}
+}
 
 function PreBeginPlay()
 {	
+	local class<CTBPlayerController> PC;
+	local class<CTBPlayerReplicationInfo> PRI;
 	Super.PreBeginPlay();
+
+	// set-up config
+	CTBGameReplicationInfo(GameReplicationInfo).BottlesPerCrate = BottlesPerCrate;
+
+	PC = class<CTBPlayerController>(DynamicLoadObject(PlayerControllerClassName, class'Class'));
+	if (PC != none) 
+	{
+		PC.default.DEFbHealthPickupRestore = bHealthPickupRestore;
+
+		PRI = class<CTBPlayerReplicationInfo>(PC.default.PlayerReplicationInfoClass);
+		if (PRI != none)
+		{
+			PRI.default.DEFMaxBeerConsumption = MaxBeerConsumption;
+			PRI.default.DEFfDrinkSpeed = fDrinkSpeed;
+			PRI.default.DEFfSoberSpeed = fSoberSpeed;
+			PRI.default.DEFsmWanderSpeed = smWanderSpeed;
+			PRI.default.DEFsmAccel = smAccel;
+		}
+		else Warn(PC.default.PlayerReplicationInfoClass@"is invalid");
+	}
+	else Warn(PlayerControllerClassName@"is invalid");
+
 	ReplaceFlags();
 }
 
@@ -31,7 +111,6 @@ function ReplaceFlags()
 		if (BeerBase(FB) == none)
 		{
 			NewLoc = FB.Location;
-			//NewLoc.Z = NewLoc.Z-100;
 			if (xBlueFlagBase(FB) != none)
 			{
 				B = Spawn(class'xBlueBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
@@ -160,6 +239,40 @@ function ScoreFlag(Controller Scorer, CTFFlag theFlag)
 	}
 }
 
+static function FillPlayInfo(PlayInfo PlayInfo)
+{
+	local int i;
+	Super.FillPlayInfo(PlayInfo);
+
+	PlayInfo.AddSetting("Rules",  "BottlesPerCrate",			default.CTBPropsDisplayText[i++], 0,  20, "Text",	"3;1;999");
+	PlayInfo.AddSetting("Rules",  "bHealthPickupRestore", default.CTBPropsDisplayText[i++], 0,  20, "Check");
+	PlayInfo.AddSetting("Rules",  "MaxBeerConsumption",		default.CTBPropsDisplayText[i++], 0,  20, "Text",	"3;1;999");
+	PlayInfo.AddSetting("Rules",  "fDrinkSpeed",					default.CTBPropsDisplayText[i++], 0,  20, "Text",	"5;0;99999");
+	PlayInfo.AddSetting("Rules",  "fSoberSpeed",					default.CTBPropsDisplayText[i++], 0,  20, "Text",	"5;0;99999");
+	PlayInfo.AddSetting("Rules",  "smWanderSpeed",				default.CTBPropsDisplayText[i++], 0,  20, "Text",	"5;0;99999");
+	PlayInfo.AddSetting("Rules",  "smAccel",							default.CTBPropsDisplayText[i++], 0,  20, "Text",	"5;0;99999");
+}
+
+function GetServerDetails( out ServerResponseLine ServerState )
+{
+	local int i;
+	Super.GetServerDetails( ServerState );
+
+	i = ServerState.ServerInfo.Length;
+
+	ServerState.ServerInfo.Length = i+1;
+	ServerState.ServerInfo[i].Key = "BottlesPerCrate";
+	ServerState.ServerInfo[i++].Value = string(BottlesPerCrate);
+
+	ServerState.ServerInfo.Length = i+1;
+	ServerState.ServerInfo[i].Key = "MaxBeerConsumption";
+	ServerState.ServerInfo[i++].Value = string(MaxBeerConsumption);
+
+	ServerState.ServerInfo.Length = i+1;
+	ServerState.ServerInfo[i].Key = "HealthPickupRestores";
+	ServerState.ServerInfo[i++].Value = string(bHealthPickupRestore);
+}
+
 defaultproperties
 {
 	GameName="Capture the Beer"
@@ -169,4 +282,22 @@ defaultproperties
 	HUDType="CaptureTheBeer.CTBHUD"
 
 	GoalScore=72
+	// GRI
+	BottlesPerCrate=24
+	// PC
+	bHealthPickupRestore=true
+	// PRI
+	MaxBeerConsumption=24
+	fDrinkSpeed=20
+	fSoberSpeed=60
+	smWanderSpeed=500
+	smAccel=2.5
+
+	CTBPropsDisplayText(0)="Bottles Per Crate"
+	CTBPropsDisplayText(1)="Health Restores Consumption"
+	CTBPropsDisplayText(2)="Max. Beer Consumption"
+	CTBPropsDisplayText(3)="Drinking Speed"
+	CTBPropsDisplayText(4)="Sobering Speed"
+	CTBPropsDisplayText(5)="Mouse Wander Speed"
+	CTBPropsDisplayText(6)="Mouse Wander Acceleration"
 }

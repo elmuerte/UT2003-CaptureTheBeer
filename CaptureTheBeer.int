@@ -1,2 +1,2 @@
 [Public]
-Object=(Class=Class,MetaClass=Engine.GameInfo,name=CaptureTheBeer.CTBgame,Description="CTF|Capture the Beer|xinterface.Tab_IACaptureTheFlag|xinterface.MapListCaptureTheFlag|true")
+Object=(Class=Class,MetaClass=Engine.GameInfo,name=CaptureTheBeer.CTBgame,Description="CTF|Capture the Beer|CaptureTheBeer.Tab_IACaptureTheBeer|xinterface.MapListCaptureTheFlag|true")
