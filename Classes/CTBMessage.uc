@@ -3,13 +3,24 @@
 // Beer action messages
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBMessage.uc,v 1.2 2003/10/17 11:22:35 elmuerte Exp $
+// $Id: CTBMessage.uc,v 1.3 2003/10/21 22:08:55 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBMessage extends CTFMessage;
 
+#exec AUDIO IMPORT FILE="Sounds\red_crate_returned.wav" NAME="Red_Crate_Returned"
+#exec AUDIO IMPORT FILE="Sounds\blue_crate_returned.wav" NAME="Blue_Crate_Returned"
+#exec AUDIO IMPORT FILE="Sounds\red_crate_dropped.wav" NAME="Red_Crate_Dropped"
+#exec AUDIO IMPORT FILE="Sounds\blue_crate_dropped.wav" NAME="Blue_Crate_Dropped"
+#exec AUDIO IMPORT FILE="Sounds\red_crate_taken.wav" NAME="Red_Crate_Taken"
+#exec AUDIO IMPORT FILE="Sounds\blue_crate_taken.wav" NAME="Blue_Crate_Taken"
+#exec AUDIO IMPORT FILE="Sounds\red_team_ran_out_of_beer.wav" NAME="Red_Out_Of_Beer"
+#exec AUDIO IMPORT FILE="Sounds\blue_team_ran_out_of_beer.wav" NAME="Blue_Out_Of_Beer"
+
 var localized string NoBeerRed, NoBeerBlue;
 var localized string TooMuchToDrink;
+
+var Sound	NoBeerSounds[2];
 
 static simulated function ClientReceive( 
 	PlayerController P,
@@ -23,7 +34,7 @@ static simulated function ClientReceive(
 	if ( TeamInfo(OptionalObject) == None ) return;
 	switch (Switch)
 	{
-		case 7: // out of beer
+		case 7: P.PlayAnnouncement(default.NoBeerSounds[TeamInfo(OptionalObject).TeamIndex],2, true);
 						break;
 		case 8: // too much beer, dropped it
 						Super.ClientReceive(P, 2, RelatedPRI_1, RelatedPRI_2, OptionalObject);
@@ -69,6 +80,15 @@ static function string GetString(
 
 defaultproperties
 {
+	ReturnSounds(0)=Sound'CaptureTheBeer.Red_Crate_Returned'
+	ReturnSounds(1)=Sound'CaptureTheBeer.Blue_Crate_Returned'
+	DroppedSounds(0)=Sound'CaptureTheBeer.Red_Crate_Dropped'
+	DroppedSounds(1)=Sound'CaptureTheBeer.Blue_Crate_Dropped'
+	TakenSounds(0)=Sound'CaptureTheBeer.Red_Crate_Taken'
+	TakenSounds(1)=Sound'CaptureTheBeer.Blue_Crate_Taken'
+	NoBeerSounds(0)=Sound'CaptureTheBeer.Red_Out_Of_Beer'
+	NoBeerSounds(1)=Sound'CaptureTheBeer.Blue_Out_Of_Beer'
+
 	ReturnBlue="returned the blue beer crate!" 
 	ReturnRed="returned the red beer crate!"
 	ReturnedBlue="The blue beer crate was returned!"

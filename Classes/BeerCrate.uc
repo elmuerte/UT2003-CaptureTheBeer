@@ -3,7 +3,7 @@
 // The ingame beer crate you can carry around
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: BeerCrate.uc,v 1.6 2003/10/21 10:59:56 elmuerte Exp $
+// $Id: BeerCrate.uc,v 1.7 2003/10/21 22:08:55 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class BeerCrate extends CTFflag abstract;
@@ -48,8 +48,6 @@ begin:
 function OutOfBeer()
 {
 	BroadcastLocalizedMessage( MessageClass, 7, Holder.PlayerReplicationInfo, None, Team );
-	// TODO: out of beer message
-	UnrealMPGameInfo(Level.Game).GameEvent("flag_dropped",""$Team.TeamIndex, Holder.PlayerReplicationInfo);
 	ClearHolder();
 	CalcSetHome();
   GotoState('Home');
@@ -58,7 +56,6 @@ function OutOfBeer()
 function TooMuchToDrink()
 {
 	BroadcastLocalizedMessage( MessageClass, 8, Holder.PlayerReplicationInfo, None, Team );
-	UnrealMPGameInfo(Level.Game).GameEvent("flag_dropped",""$Team.TeamIndex, Holder.PlayerReplicationInfo);
 	Drop(Holder.velocity * 0.5);
 }
 
