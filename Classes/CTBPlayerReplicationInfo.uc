@@ -3,10 +3,12 @@
 // Replication info for the player
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBPlayerReplicationInfo.uc,v 1.2 2003/10/16 15:52:18 elmuerte Exp $
+// $Id: CTBPlayerReplicationInfo.uc,v 1.3 2003/10/16 21:58:30 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBPlayerReplicationInfo extends xPlayerReplicationInfo;
+
+#exec AUDIO IMPORT FILE="Sounds\Consume.wav" NAME="ConsumeSound"
 
 /** number of beer bottles consumed */
 var float BeerConsumption;
@@ -52,7 +54,7 @@ event tick(float deltatime)
 		{
 			curDrunkSpeed = fDrinkSpeed;
 			BeerConsumption += 1;
-			if (ConsumeBeer != none) PlayOwnedSound(ConsumeBeer, SLOT_Interact);
+			GameObject(HasFlag).Holder.PlayOwnedSound(ConsumeBeer, SLOT_Interface);
 			if (BeerCrate(HasFlag) != none)
 			{
 				BeerCrate(HasFlag).BottlesLeft--;
@@ -77,5 +79,5 @@ defaultproperties
 	smWanderDirX=1
 	smWanderDirY=1
 
-	//ConsumeBeer=sound'CaptureTheBeer.Consume'
+	ConsumeBeer=sound'CaptureTheBeer.ConsumeSound'
 }
