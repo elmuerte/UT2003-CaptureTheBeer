@@ -3,7 +3,7 @@
 // Replication info for the player
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBPlayerReplicationInfo.uc,v 1.1 2003/10/16 15:14:45 elmuerte Exp $
+// $Id: CTBPlayerReplicationInfo.uc,v 1.2 2003/10/16 15:52:18 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBPlayerReplicationInfo extends xPlayerReplicationInfo;
@@ -62,6 +62,8 @@ event tick(float deltatime)
 		}
 	}
 	else curDrunkSpeed = 0; // always consume the first bottle
+
+	if (BeerConsumption < 0) BeerConsumption = 0;
 }
 
 defaultproperties
