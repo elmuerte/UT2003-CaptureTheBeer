@@ -3,7 +3,7 @@
 // Game class
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBgame.uc,v 1.1 2003/10/16 15:14:45 elmuerte Exp $
+// $Id: CTBgame.uc,v 1.2 2003/10/20 09:19:32 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBgame extends xCTFgame;
@@ -14,21 +14,50 @@ function PreBeginPlay()
 	ReplaceFlags();
 }
 
+function PostBeginPlay()
+{	
+	Super.PostBeginPlay();
+	HideOldFlags();
+}
+
 function ReplaceFlags()
 {
 	local xRealCTFBase FB;
+	local BeerBase B;
+	local vector NewLoc;
+
 	ForEach AllActors(Class'xRealCTFBase', FB)
 	{
-		if (xBlueFlagBase(FB) != none)
+		if (BeerBase(FB) == none)
 		{
-			FB.ObjectiveName = "Blue Beer Crate Base";
-			FB.FlagType = class'CaptureTheBeer.xBlueBeerCrate';
-			//FB.Skins[0] = 
+			NewLoc = FB.Location;
+			NewLoc.Y = NewLoc.Y-10;
+			if (xBlueFlagBase(FB) != none)
+			{
+				B = Spawn(class'CaptureTheBeer.xBlueBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
+			}
+			else {
+				B = Spawn(class'CaptureTheBeer.xRedBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
+			}
+			if ( B != None )
+			{
+				B.event = FB.event;
+				B.tag = FB.tag;
+				FB.FlagType = none;
+			}
 		}
-		else {
-			FB.ObjectiveName = "Red Beer Crate Base";
-			FB.FlagType = class'CaptureTheBeer.xRedBeerCrate';
-			//FB.Skins[0] = 
+	}
+}
+
+function HideOldFlags()
+{
+	local xRealCTFBase FB;
+
+	ForEach AllActors(Class'xRealCTFBase', FB)
+	{
+		if (BeerBase(FB) == none)
+		{
+			FB.bHidden = true;
 		}
 	}
 }
