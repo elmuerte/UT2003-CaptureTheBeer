@@ -3,7 +3,7 @@
 // The ingame beer crate you can carry around
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: BeerCrate.uc,v 1.5 2003/10/20 21:15:53 elmuerte Exp $
+// $Id: BeerCrate.uc,v 1.6 2003/10/21 10:59:56 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class BeerCrate extends CTFflag abstract;
@@ -16,6 +16,9 @@ replication
 	reliable if ( Role == ROLE_Authority )
 		BottlesLeft;
 }
+
+// DONT
+simulated function UpdateForTeam();
 
 function bool ValidHolder(Actor Other)
 {

@@ -3,10 +3,13 @@
 // The new base for the beer crates
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: BeerBase.uc,v 1.2 2003/10/20 13:39:24 elmuerte Exp $
+// $Id: BeerBase.uc,v 1.3 2003/10/21 10:59:56 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class BeerBase extends xRealCTFBase abstract;
+
+// DONT
+simulated function UpdateForTeam();
 
 defaultproperties
 {

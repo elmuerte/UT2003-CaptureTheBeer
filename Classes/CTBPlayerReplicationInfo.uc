@@ -3,7 +3,7 @@
 // Replication info for the player
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBPlayerReplicationInfo.uc,v 1.3 2003/10/16 21:58:30 elmuerte Exp $
+// $Id: CTBPlayerReplicationInfo.uc,v 1.4 2003/10/21 10:59:56 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBPlayerReplicationInfo extends xPlayerReplicationInfo;
@@ -54,7 +54,7 @@ event tick(float deltatime)
 		{
 			curDrunkSpeed = fDrinkSpeed;
 			BeerConsumption += 1;
-			GameObject(HasFlag).Holder.PlayOwnedSound(ConsumeBeer, SLOT_Interface);
+			GameObject(HasFlag).Holder.PlaySound(ConsumeBeer, SLOT_Interface);
 			if (BeerCrate(HasFlag) != none)
 			{
 				BeerCrate(HasFlag).BottlesLeft--;
