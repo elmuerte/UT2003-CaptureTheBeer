@@ -1,20 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+// Capture The Beer
+// Red beer base
+//
+// Copyright 2003, Michiel "El Muerte" Hendriks
+// $Id: xRedBeerBase.uc,v 1.2 2003/10/20 13:39:24 elmuerte Exp $
+////////////////////////////////////////////////////////////////////////////////
+
 class xRedBeerBase extends BeerBase placeable;
 
 #exec OBJ LOAD FILE=XGameTextures.utx
-
-simulated function PostBeginPlay()
-{
-	/*
-    local xCTFBase xbase;
-
-    Super.PostBeginPlay();
-
-    if ( Level.NetMode != NM_DedicatedServer )
-    {    
-        xbase = Spawn(class'XGame.xCTFBase',self,,Location-BaseOffset,rot(0,0,0));
-    }
-	*/
-}
 
 defaultproperties
 {

@@ -1,21 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+// Capture The Beer
+// Blue beer base
+//
+// Copyright 2003, Michiel "El Muerte" Hendriks
+// $Id: xBlueBeerBase.uc,v 1.2 2003/10/20 13:39:24 elmuerte Exp $
+////////////////////////////////////////////////////////////////////////////////
+
 class xBlueBeerBase extends BeerBase placeable;
 
 #exec OBJ LOAD FILE=XGameTextures.utx
-
-simulated function PostBeginPlay()
-{
-	/*
-    local xCTFBase xbase;
-
-    Super.PostBeginPlay();
-
-    if ( Level.NetMode != NM_DedicatedServer )
-    {    
-        xbase = Spawn(class'XGame.xCTFBase',self,,Location-BaseOffset,rot(0,0,0));
-        xbase.Skins[0] = Texture'XGameTextures.FlagBaseTexB';
-    }
-	*/
-}
 
 defaultproperties
 {

@@ -3,7 +3,7 @@
 // Game class
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: CTBgame.uc,v 1.2 2003/10/20 09:19:32 elmuerte Exp $
+// $Id: CTBgame.uc,v 1.3 2003/10/20 13:39:24 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class CTBgame extends xCTFgame;
@@ -31,20 +31,20 @@ function ReplaceFlags()
 		if (BeerBase(FB) == none)
 		{
 			NewLoc = FB.Location;
-			NewLoc.Y = NewLoc.Y-10;
+			//NewLoc.Z = NewLoc.Z-100;
 			if (xBlueFlagBase(FB) != none)
 			{
-				B = Spawn(class'CaptureTheBeer.xBlueBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
+				B = Spawn(class'xBlueBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
 			}
 			else {
-				B = Spawn(class'CaptureTheBeer.xRedBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
+				B = Spawn(class'xRedBeerBase', FB.Owner, FB.tag, NewLoc, FB.Rotation);
 			}
 			if ( B != None )
 			{
 				B.event = FB.event;
-				B.tag = FB.tag;
-				FB.FlagType = none;
+				B.tag = FB.tag;				
 			}
+			FB.FlagType = none; // so the other flag won't spawn
 		}
 	}
 }

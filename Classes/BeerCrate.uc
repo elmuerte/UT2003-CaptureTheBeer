@@ -3,7 +3,7 @@
 // The ingame beer crate you can carry around
 //
 // Copyright 2003, Michiel "El Muerte" Hendriks
-// $Id: BeerCrate.uc,v 1.3 2003/10/20 09:19:32 elmuerte Exp $
+// $Id: BeerCrate.uc,v 1.4 2003/10/20 13:39:24 elmuerte Exp $
 ////////////////////////////////////////////////////////////////////////////////
 
 class BeerCrate extends CTFflag abstract;
@@ -62,14 +62,16 @@ function TooMuchToDrink()
 defaultproperties
 {
 	MessageClass=class'CaptureTheBeer.CTBMessage'
-	PrePivot=(X=-10,Y=5,Z=-0.5)
-	DrawScale=0.1
+	PrePivot=(X=1,Y=1,Z=-0.5)
 	DrawType=DT_StaticMesh
-	StaticMesh=StaticMesh'Editor.TexPropCube'
+	//DrawScale=0.15
+	//StaticMesh=StaticMesh'Editor.TexPropCube'
+	DrawScale=0.6
+	StaticMesh=StaticMesh'CTBmesh.BeerCrateMesh'
 	
 	bDynamicLight=true
 	LightHue=40
-	LightBrightness=200
+	LightBrightness=128
 	bUnlit=true
 	LightType=LT_Steady
 	LightEffect=LE_QuadraticNonIncidence
